@@ -1,13 +1,13 @@
 pipeline {
     agent any
     environment {
-        DOCKER_HUB_USER = 'your-dockerhub-username'
-        DOCKER_IMAGE = "${DOCKER_HUB_USER}/my-sample-app"
+        DOCKER_HUB_USER = 'subhankar28'        // Your Docker Hub username
+        IMAGE_NAME = 'my-sample-app'           // Your image name
     }
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/<your-username>/my-sample-app.git'
+                git 'https://github.com/Subhankar28/my-sample-app.git'
             }
         }
         stage('Install Dependencies') {
@@ -22,7 +22,7 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE:latest .'
+                sh 'docker build -t $DOCKER_HUB_USER/$IMAGE_NAME:latest .'
             }
         }
         stage('Login to Docker Hub') {
@@ -34,13 +34,14 @@ pipeline {
         }
         stage('Push to Docker Hub') {
             steps {
-                sh 'docker push $DOCKER_IMAGE:latest'
+                sh 'docker push $DOCKER_HUB_USER/$IMAGE_NAME:latest'
             }
         }
         stage('Deploy to EC2') {
             steps {
-                sh 'docker pull $DOCKER_IMAGE:latest'
-                sh 'docker run -d -p 80:5000 $DOCKER_IMAGE:latest'
+                sh 'docker pull $DOCKER_HUB_USER/$IMAGE_NAME:latest'
+                sh 'docker stop $(docker ps -q) || true'
+                sh 'docker run -d -p 80:5000 $DOCKER_HUB_USER/$IMAGE_NAME:latest'
             }
         }
     }
