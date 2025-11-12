@@ -24,7 +24,7 @@ stage('Run Tests') {
     steps {
         sh '''
             . venv/bin/activate
-            pytest tests/
+            pytest test/test_app.py
         '''
     }
 }
