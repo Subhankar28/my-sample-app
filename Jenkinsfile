@@ -1,13 +1,13 @@
 pipeline {
     agent any
     environment {
-        DOCKER_HUB_USER = 'subhankar28'        // Your Docker Hub username
-        IMAGE_NAME = 'my-sample-app'           // Your image name
+        DOCKER_HUB_USER = 'subhankar28'
+        IMAGE_NAME = 'my-sample-app'
     }
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Subhankar28/my-sample-app.git'
+                git branch: 'main', url: 'https://github.com/Subhankar28/my-sample-app.git'
             }
         }
         stage('Install Dependencies') {
