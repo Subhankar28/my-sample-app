@@ -19,11 +19,16 @@ pipeline {
         '''
     }
 }
-        stage('Run Tests') {
-            steps {
-                sh 'pytest tests/'
-            }
-        }
+        
+stage('Run Tests') {
+    steps {
+        sh '''
+            . venv/bin/activate
+            pytest tests/
+        '''
+    }
+}
+
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t $DOCKER_HUB_USER/$IMAGE_NAME:latest .'
